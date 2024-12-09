@@ -1,0 +1,4 @@
+"C:\Program Files\JetBrains\CLion 2024.2.1\bin\cmake\win\x64\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug -G "MinGW Makefiles" -S "C:\Users\alain\OneDrive\Documents\X3(ESIEA)\Objet\Taquin - version graphique" -B "C:\Users\alain\OneDrive\Documents\X3(ESIEA)\Objet\Taquin - version graphique\cmake-build-debug"
+-- Configuring done (0.1s)
+-- Generating done (0.0s)
+-- Build files have been written to: C:/Users/alain/OneDrive/Documents/X3(ESIEA)/Objet/Taquin - version graphique/cmake-build-debug
