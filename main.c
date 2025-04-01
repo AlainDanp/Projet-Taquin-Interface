@@ -132,7 +132,6 @@ int main(int argc, char *argv[]) {
         switch (current_menu) {
             case MENU_PRINCIPAL:
                 show_main_menu(renderer, selected_option);
-
                 break;
             case MENU_DIFFICULTE:
                 show_difficulty_menu(renderer, selected_option);

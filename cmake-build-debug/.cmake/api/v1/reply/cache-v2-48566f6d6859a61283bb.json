@@ -394,6 +394,22 @@
 			"value" : ""
 		},
 		{
+			"name" : "CMAKE_EXPORT_COMPILE_COMMANDS",
+			"properties" : 
+			[
+				{
+					"name" : "ADVANCED",
+					"value" : "1"
+				},
+				{
+					"name" : "HELPSTRING",
+					"value" : "Enable/Disable output of compile commands during generation."
+				}
+			],
+			"type" : "BOOL",
+			"value" : ""
+		},
+		{
 			"name" : "CMAKE_EXTRA_GENERATOR",
 			"properties" : 
 			[
@@ -427,7 +443,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "MinGW Makefiles"
+			"value" : "Ninja"
 		},
 		{
 			"name" : "CMAKE_GENERATOR_INSTANCE",
@@ -534,16 +550,12 @@
 			"properties" : 
 			[
 				{
-					"name" : "ADVANCED",
-					"value" : "1"
-				},
-				{
 					"name" : "HELPSTRING",
 					"value" : "make program"
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/PROGRA~1/JETBRA~1/CLION2~1.1/bin/mingw/bin/mingw32-make.exe"
+			"value" : "C:/Program Files/JetBrains/CLion 2024.2.1/bin/ninja/win/x64/ninja.exe"
 		},
 		{
 			"name" : "CMAKE_MODULE_LINKER_FLAGS",
@@ -1135,7 +1147,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "[mingw32;-mwindows;C:/Users/alain/OneDrive/Documents/X3(ESIEA)/Objet/SDL2-2.30.9/x86_64-w64-mingw32/lib/libSDL2main.a;C:/Users/alain/OneDrive/Documents/X3(ESIEA)/Objet/SDL2-2.30.9/x86_64-w64-mingw32/lib/libSDL2.dll.a][C:/Users/alain/OneDrive/Documents/X3(ESIEA)/Objet/SDL2-2.30.9/x86_64-w64-mingw32/include/SDL2][v()]"
+			"value" : "[mingw32;-mwindows;C:/Users/alain/OneDrive/Documents/X3(ESIEA)/Objet/Taquin - version graphique/SDL/SDL2-2.30.9/x86_64-w64-mingw32/lib/libSDL2main.a;C:/Users/alain/OneDrive/Documents/X3(ESIEA)/Objet/Taquin - version graphique/SDL/SDL2-2.30.9/x86_64-w64-mingw32/lib/libSDL2.dll.a][C:/Users/alain/OneDrive/Documents/X3(ESIEA)/Objet/Taquin - version graphique/SDL/SDL2-2.30.9/x86_64-w64-mingw32/include/SDL2][v()]"
 		},
 		{
 			"name" : "FIND_PACKAGE_MESSAGE_DETAILS_Threads",
@@ -1207,7 +1219,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Users/alain/OneDrive/Documents/X3(ESIEA)/Objet/SDL2-2.30.9/x86_64-w64-mingw32/lib/libSDL2main.a"
+			"value" : "C:/Users/alain/OneDrive/Documents/X3(ESIEA)/Objet/Taquin - version graphique/SDL/SDL2-2.30.9/x86_64-w64-mingw32/lib/libSDL2main.a"
 		},
 		{
 			"name" : "SDL2_INCLUDE_DIR",
@@ -1219,7 +1231,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "C:/Users/alain/OneDrive/Documents/X3(ESIEA)/Objet/SDL2-2.30.9/x86_64-w64-mingw32/include/SDL2"
+			"value" : "C:/Users/alain/OneDrive/Documents/X3(ESIEA)/Objet/Taquin - version graphique/SDL/SDL2-2.30.9/x86_64-w64-mingw32/include/SDL2"
 		},
 		{
 			"name" : "SDL2_LIBRARY",
@@ -1231,7 +1243,7 @@
 				}
 			],
 			"type" : "STRING",
-			"value" : "mingw32;-mwindows;C:/Users/alain/OneDrive/Documents/X3(ESIEA)/Objet/SDL2-2.30.9/x86_64-w64-mingw32/lib/libSDL2main.a;C:/Users/alain/OneDrive/Documents/X3(ESIEA)/Objet/SDL2-2.30.9/x86_64-w64-mingw32/lib/libSDL2.dll.a"
+			"value" : "mingw32;-mwindows;C:/Users/alain/OneDrive/Documents/X3(ESIEA)/Objet/Taquin - version graphique/SDL/SDL2-2.30.9/x86_64-w64-mingw32/lib/libSDL2main.a;C:/Users/alain/OneDrive/Documents/X3(ESIEA)/Objet/Taquin - version graphique/SDL/SDL2-2.30.9/x86_64-w64-mingw32/lib/libSDL2.dll.a"
 		},
 		{
 			"name" : "SDL2_LIBRARY_TEMP",
@@ -1243,7 +1255,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "mingw32;-mwindows;C:/Users/alain/OneDrive/Documents/X3(ESIEA)/Objet/SDL2-2.30.9/x86_64-w64-mingw32/lib/libSDL2main.a;mingw32;-mwindows;C:/Users/alain/OneDrive/Documents/X3(ESIEA)/Objet/SDL2-2.30.9/x86_64-w64-mingw32/lib/libSDL2main.a;mingw32;-mwindows;C:/Users/alain/OneDrive/Documents/X3(ESIEA)/Objet/SDL2-2.30.9/x86_64-w64-mingw32/lib/libSDL2main.a;mingw32;-mwindows;C:/Users/alain/OneDrive/Documents/X3(ESIEA)/Objet/SDL2-2.30.9/x86_64-w64-mingw32/lib/libSDL2main.a;mingw32;-mwindows;C:/Users/alain/OneDrive/Documents/X3(ESIEA)/Objet/SDL2-2.30.9/x86_64-w64-mingw32/lib/libSDL2main.a;C:/Users/alain/OneDrive/Documents/X3(ESIEA)/Objet/SDL2-2.30.9/x86_64-w64-mingw32/lib/libSDL2.dll.a"
+			"value" : "mingw32;-mwindows;C:/Users/alain/OneDrive/Documents/X3(ESIEA)/Objet/Taquin - version graphique/SDL/SDL2-2.30.9/x86_64-w64-mingw32/lib/libSDL2main.a;C:/Users/alain/OneDrive/Documents/X3(ESIEA)/Objet/Taquin - version graphique/SDL/SDL2-2.30.9/x86_64-w64-mingw32/lib/libSDL2.dll.a"
 		},
 		{
 			"name" : "_CMAKE_LINKER_PUSHPOP_STATE_SUPPORTED",

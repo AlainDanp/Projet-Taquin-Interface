@@ -20,6 +20,9 @@ Mix_Music *background_musics[MAX_MUSICS] = {NULL};
 int current_music_index = 0;  // Par défaut, première musique
 TemporaryMessage temp_message = {"", 0};
 
+int scroll_index = 0;
+int max_visible_lines = 100;
+
 Mix_Chunk *move_sound = NULL;
 Mix_Chunk *select_sound = NULL;
 Mix_Music *background_music = NULL;
@@ -115,8 +118,14 @@ void handle_key(SDL_Keycode key) {
                                    (game.difficulty == NORMAL) ? "save_game_normal.txt" :
                                    "save_game_hard.txt";save_game(filename);break;// Sauvegarde basée sur le niveau
         }
-        case SDLK_c:
-            stop_background_music();  // Ouvrir le menu de chargement
+        case SDLK_k: // Scroll vers le haut
+            scroll_index++;
+            break;
+        case SDLK_l:
+            scroll_index--;
+            break;
+        case SDLK_s:
+            stop_background_music();
             break;
     }
     Mix_PlayChannel(-1, move_sound, 0); // le son de déplacement
@@ -263,11 +272,15 @@ void render_game(SDL_Renderer *renderer, TTF_Font *font) {
     SDL_Rect history_clip = {560, 150, 380, 120};
     SDL_RenderSetClipRect(renderer, &history_clip);
 
-    int y_offset = 150 + game.scrol_offset;
-    for (int i = 0; i < game.moves_count; i++) {
-        snprintf(buffer, sizeof(buffer), "- %s", game.moves_history[i]);
-        afficher_message(renderer, buffer, 570, y_offset);
-        y_offset += 20;
+    int y_offset = 150;
+    for (int i = 0; i < max_visible_lines; i++) {
+        int history_index = scroll_index + i;
+        if (history_index < game.moves_count) {
+            char buffer[100];
+            snprintf(buffer, sizeof(buffer), "- %s", game.moves_history[history_index]);
+            afficher_message(renderer, buffer, 570, y_offset);
+            y_offset += 20;
+        }
     }
 
     SDL_RenderSetClipRect(renderer, NULL);
@@ -505,7 +518,7 @@ void handle_game_input(SDL_Event *event) {
 }
 
 
-void afficherNumero(SDL_Renderer *renderer, TTF_Font *font, int numero, int x, int y, int largeur, int hauteur) {
+void afficherNumero(SDL_Renderer *renderer, TTF_Font *font, int numero, int x, int y, int largeur, int hauteur) { // permet de mettre les numéros sur les cases
     // Convertir le numéro en texte
     char texte[5];
     snprintf(texte, sizeof(texte), "%d", numero);
@@ -551,7 +564,7 @@ void handle_victory(SDL_Renderer *renderer, TTF_Font *font) {
 
 
 
-void update_timer(Uint32 start_time) {
+void update_timer(Uint32 start_time) { // chronomètre
     if (!stop_timer) {  // Mettre à jour uniquement si le jeu n'est pas terminé
         Uint32 current_time = SDL_GetTicks();
         game.time_elapsed = (current_time - start_time) / 1000;  // Temps en secondes
@@ -561,7 +574,7 @@ void update_timer(Uint32 start_time) {
 
 
 
-void game_loop(SDL_Renderer *renderer, TTF_Font *font, MenuState previous_menu) {
+void game_loop(SDL_Renderer *renderer, TTF_Font *font, MenuState previous_menu) { // boucle principal du jeu
     SDL_Event e;
     bool running = true;
     Uint32 start_time = SDL_GetTicks();
@@ -570,11 +583,11 @@ void game_loop(SDL_Renderer *renderer, TTF_Font *font, MenuState previous_menu) 
 
     while (running) {
         while (SDL_PollEvent(&e)) {
-
             if (e.type == SDL_QUIT) {
                 running = false; // Quitte la boucle
                 current_menu = MENU_PRINCIPAL; // Retourne au menu principal en cas de fermeture
             }
+
 
             if (e.type == SDL_KEYDOWN) {
                 SDL_Keycode key = e.key.keysym.sym;
@@ -601,7 +614,7 @@ void game_loop(SDL_Renderer *renderer, TTF_Font *font, MenuState previous_menu) 
     }
 }
 
-void add_move_to_history(const char *move) {
+void add_move_to_history(const char *move) { // ajout d'un mouvements dans l'historique de mouvements
     // S'assurer que l'historique ne dépasse pas la taille maximale
     if (game.moves_count < MAX_HISTORY) {
         // Ajouter le mouvement à l'historique
@@ -619,12 +632,12 @@ void add_move_to_history(const char *move) {
     }
 }
 
-void reset_game_history() {
+void reset_game_history() { // effacer l'historique
     game.moves_count = 0;  // Réinitialiser le compteur de mouvements
     memset(game.moves_history, 0, sizeof(game.moves_history));  // Vider l'historique des mouvements
 }
 
-void save_game(const char *filename) {
+void save_game(const char *filename) { //sauvegarde d'un niveau
     FILE *file = fopen(filename, "w");
     if (!file) {
         printf("Erreur lors de l'ouverture du fichier de sauvegarde.\n");
@@ -654,7 +667,7 @@ void save_game(const char *filename) {
 }
 
 
-void load_game(const char *filename) {
+void load_game(const char *filename) { // Charger une partie selon le niveau
     FILE *file = fopen(filename, "r");
     if (!file) {
         printf("Erreur lors de l'ouverture du fichier de sauvegarde.\n");
@@ -690,7 +703,7 @@ void load_game(const char *filename) {
 }
 
 
-void show_load_menu(SDL_Renderer *renderer, int selected_option) {
+void show_load_menu(SDL_Renderer *renderer, int selected_option) { // afficher la fenêtre des sauvegardes selon les niveaux
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 
@@ -709,7 +722,7 @@ void show_load_menu(SDL_Renderer *renderer, int selected_option) {
     SDL_RenderPresent(renderer);
 }
 
-void handle_load_menu_input(SDL_Event *event, int *selected_option) {
+void handle_load_menu_input(SDL_Event *event, int *selected_option) { // Manipulation du menu de chargement
     if (event->type == SDL_KEYDOWN) {
         switch (event->key.keysym.sym) {
             case SDLK_UP:
@@ -751,11 +764,10 @@ void render_background(SDL_Renderer *renderer,Uint32 ticks){
     int red = (ticks / 10) % 255;
     int green = (ticks/15) % 255;
     int blue = (ticks/20) % 255;
-
     SDL_SetRenderDrawColor(renderer,red,green,blue,255);
     SDL_RenderClear(renderer);
 }
-void show_logo(SDL_Renderer *renderer) {
+void show_logo(SDL_Renderer *renderer) { // affiche le logo 2
     SDL_Surface *logo = SDL_LoadBMP("C:/Users/alain/OneDrive/Documents/X3(ESIEA)/Projet C/image/ESIEA.bmp");
     SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, logo);
 
@@ -771,7 +783,7 @@ void show_logo(SDL_Renderer *renderer) {
     transition_fade(renderer);
 
 }
-void show_logo2(SDL_Renderer *renderer) {
+void show_logo2(SDL_Renderer *renderer) { // affiche le logo 1
     SDL_Surface *logo = SDL_LoadBMP("C:/Users/alain/OneDrive/Documents/X3(ESIEA)/Projet C/image/logo.bmp");
     SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, logo);
 
@@ -785,7 +797,7 @@ void show_logo2(SDL_Renderer *renderer) {
     transition_fade(renderer);
 }
 
-void show_option_menu(SDL_Renderer*renderer, int selected_option){
+void show_option_menu(SDL_Renderer*renderer, int selected_option){ // affichier les options theme
     SDL_SetRenderDrawColor(renderer,current_theme.background.r,current_theme.background.g,current_theme.background.b,255);
     SDL_RenderClear(renderer);
 
@@ -807,7 +819,7 @@ void show_option_menu(SDL_Renderer*renderer, int selected_option){
     SDL_RenderPresent(renderer);
 }
 
-void show_victory_window(SDL_Renderer *renderer, TTF_Font *font) {
+void show_victory_window(SDL_Renderer *renderer, TTF_Font *font) { // affichier l'écran de victoir
     // Dimensions de la fenêtre de victoire
     SDL_Rect victory_window = {200, 150, 450, 300};  // Position et taille de la fenêtre
     SDL_SetRenderDrawColor(renderer, 30, 30, 30, 255);  // Fond sombre
@@ -887,7 +899,7 @@ void show_victory_window(SDL_Renderer *renderer, TTF_Font *font) {
     SDL_StopTextInput();
 }
 
-void save_player_to_history(const char *default_name) {
+void save_player_to_history(const char *default_name) { // sauvegarder l'historique des joueurs après victoir
     char player_name[5] = "";  // Nom du joueur, maximum 4 caractères
     int name_length = 0;
 
@@ -945,10 +957,13 @@ void save_player_to_history(const char *default_name) {
 
 
 
-void show_player_history(SDL_Renderer *renderer, TTF_Font *font) {
+void show_player_history(SDL_Renderer *renderer, TTF_Font *font) { // Affichier l'historique des joueurs
     SDL_Rect history_window = {100, 100, 600, 400}; // Position et taille de la fenêtre
-    SDL_SetRenderDrawColor(renderer, 50, 50, 50, 255); // Fond gris foncé
-    SDL_RenderFillRect(renderer, &history_window);
+    SDL_SetRenderDrawColor(renderer, 50, 50, 50, 255);
+    SDL_RenderFillRect(renderer, &history_window); // Fond sombre pour la fenêtre
+
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    SDL_RenderDrawRect(renderer, &history_window); // Bordure blanche
 
     afficher_message(renderer, "Historique des joueurs", 120, 120);
 
@@ -956,55 +971,78 @@ void show_player_history(SDL_Renderer *renderer, TTF_Font *font) {
     if (!file) {
         afficher_message(renderer, "Aucun historique disponible.", 150, 160);
         SDL_RenderPresent(renderer);
-        SDL_Delay(3000); // Pause pour voir le message
-        current_menu = MENU_PRINCIPAL; // Retour automatique au menu principal
+        SDL_Delay(2000);
         return;
     }
 
-    char line[256];
-    int y = 180; // Position de départ pour afficher les données
-    while (fgets(line, sizeof(line), file)) {
-        afficher_message(renderer, line, 120, y);
-        y += 30; // Espacement entre chaque ligne
+    // Chargement des lignes depuis le fichier
+    char lines[MAX_HISTORY][256];
+    int line_count = 0;
+
+    while (fgets(lines[line_count], sizeof(lines[line_count]), file)) {
+        line_count++;
     }
-
     fclose(file);
-    SDL_RenderPresent(renderer);
 
-    // Attendre un événement pour quitter
+    int scroll_index = 0;
+    int visible_lines = 10; // Nombre de lignes visibles
     SDL_Event e;
-    while (SDL_WaitEvent(&e)) {
-        if (e.type == SDL_KEYDOWN) {
-            if (e.key.keysym.sym == SDLK_RETURN) {
-                current_menu = MENU_PRINCIPAL; // Retour au menu principal
-                break;
-            } else if (e.key.keysym.sym == SDLK_ESCAPE) {
-                current_menu = MENU_PRINCIPAL; // Retour au menu principal
-                break;
+    bool viewing = true;
+
+    while (viewing) {
+        SDL_SetRenderDrawColor(renderer, 50, 50, 50, 255);
+        SDL_RenderFillRect(renderer, &history_window);
+
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        SDL_RenderDrawRect(renderer, &history_window);
+
+        afficher_message(renderer, "Historique des joueurs", 280, 120); // Titre centré
+
+        // En-tête des colonnes
+        afficher_message_with_color(renderer, "Nom", 120, 160, (SDL_Color){255, 255, 0});
+        afficher_message_with_color(renderer, "Temps", 240, 160, (SDL_Color){255, 255, 0});
+        afficher_message_with_color(renderer, "Niveau", 360, 160, (SDL_Color){255, 255, 0});
+        afficher_message_with_color(renderer, "Date", 480, 160, (SDL_Color){255, 255, 0});
+
+        // Affichage des lignes avec scroll
+        int y_offset = 190;
+        for (int i = 0; i < visible_lines; i++) {
+            int line_index = scroll_index + i;
+            if (line_index < line_count) {
+                char name[5], time[10], level[10], date[20];
+                sscanf(lines[line_index], "%4[^,], %[^,], %[^,], %[^\n]", name, time, level, date);
+
+                afficher_message(renderer, name, 120, y_offset);
+                afficher_message(renderer, time, 240, y_offset);
+                afficher_message(renderer, level, 360, y_offset);
+                afficher_message(renderer, date, 480, y_offset);
+
+                y_offset += 30;
             }
-        } else if (e.type == SDL_QUIT) {
-            exit(0); // Quitter le jeu
+        }
+
+        // Instructions en bas
+        afficher_message_with_color(renderer, "K: Haut | L: Bas | ESC: Retour", 430, 510, (SDL_Color){200, 200, 200});
+        SDL_RenderPresent(renderer);
+
+        // Gestion des événements
+        while (SDL_PollEvent(&e)) {
+            if (e.type == SDL_QUIT) {
+                viewing = false;
+                break;
+            } else if (e.type == SDL_KEYDOWN) {
+                if (e.key.keysym.sym == SDLK_k && scroll_index > 0) {
+                    scroll_index--; // Scroll vers le haut
+                } else if (e.key.keysym.sym == SDLK_l && scroll_index + visible_lines < line_count) {
+                    scroll_index++; // Scroll vers le bas
+                } else if (e.key.keysym.sym == SDLK_ESCAPE) {
+                    current_menu = MENU_PRINCIPAL;
+                    viewing = false; // Quitter l'historique pour le menu principal
+                }
+            }
         }
     }
 }
-
-
-void reload_history(char lines[][256], int *line_count) {
-    FILE *file = fopen("player.txt", "r");
-    if (!file) {
-        *line_count = 0; // Aucun fichier trouvé
-        return;
-    }
-
-    *line_count = 0;
-    while (fgets(lines[*line_count], sizeof(lines[*line_count]), file)) {
-        (*line_count)++;
-    }
-    fclose(file);
-}
-
-
-
 
 
 void transition_fade(SDL_Renderer *renderer) {
@@ -1026,19 +1064,14 @@ void transition_fade(SDL_Renderer *renderer) {
     }
 }
 
-void play_background_music() {
-    if (background_music && Mix_PlayingMusic() == 0) {
-        Mix_PlayMusic(background_music, -1); // Joue la musique en boucle (-1)
-    }
-}
 
-void stop_background_music() {
+void stop_background_music() {  // Arrête la musique
     if (Mix_PlayingMusic()) {
-        Mix_HaltMusic(); // Arrête la musique
+        Mix_HaltMusic();
     }
 }
 
-void load_musics() {
+void load_musics() { // fonction pour charger la musique de fond
     const char *music_files[MAX_MUSICS] = {
             "C:/Users/alain/OneDrive/Documents/X3(ESIEA)/Projet C/Son/background.mp3",
             "C:/Users/alain/OneDrive/Documents/X3(ESIEA)/Projet C/Son/background2.mp3",
@@ -1057,7 +1090,7 @@ void load_musics() {
 
 
 
-void show_music_menu(SDL_Renderer *renderer, int selected_option) {
+void show_music_menu(SDL_Renderer *renderer, int selected_option) { // affichier le menu de la musqiue
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 
@@ -1079,7 +1112,7 @@ void show_music_menu(SDL_Renderer *renderer, int selected_option) {
     SDL_RenderPresent(renderer);
 }
 
-void handle_music_menu_input(SDL_Event *event, int *selected_option) {
+void handle_music_menu_input(SDL_Event *event, int *selected_option) { // selectionner les musiques
     if (event->type == SDL_KEYDOWN) {
         switch (event->key.keysym.sym) {
             case SDLK_UP:
@@ -1111,7 +1144,7 @@ void handle_music_menu_input(SDL_Event *event, int *selected_option) {
     }
 }
 
-void play_selected_music() {
+void play_selected_music() { // lancer la musqiue du jeu
     if (Mix_PlayingMusic()) {
         if (Mix_GetMusicType(NULL) == MUS_MP3 && background_musics[current_music_index]) {
             return;
@@ -1125,3 +1158,6 @@ void play_selected_music() {
         printf("Erreur : aucune musique chargée à l'indice %d\n", current_music_index);
     }
 }
+
+
+

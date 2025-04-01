@@ -32,6 +32,7 @@ typedef struct {
     int scrol_offset;
 } GameState;
 
+
 typedef struct {
     char message[100];
     Uint32 display_time; // Temps en millisecondes où le message doit disparaître
@@ -119,9 +120,7 @@ void render_background(SDL_Renderer *renderer,Uint32 ticks);
 void save_player_to_history(const char *player_name);
 void show_victory_window(SDL_Renderer *renderer, TTF_Font *font);
 void transition_fade(SDL_Renderer *renderer);
-void play_background_music();
 void stop_background_music();
-void reload_history(char lines[][256], int *line_count);
 void load_musics();
 void show_music_menu(SDL_Renderer *renderer, int selected_option);
 void handle_music_menu_input(SDL_Event *event, int *selected_option);

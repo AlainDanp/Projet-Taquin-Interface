@@ -96,7 +96,7 @@
 			[
 				{
 					"backtrace" : 6,
-					"path" : "C:/Users/alain/OneDrive/Documents/X3(ESIEA)/Objet/SDL2-2.30.9/x86_64-w64-mingw32/include/SDL2"
+					"path" : "C:/Users/alain/OneDrive/Documents/X3(ESIEA)/Objet/Taquin - version graphique/SDL/SDL2-2.30.9/x86_64-w64-mingw32/include/SDL2"
 				},
 				{
 					"backtrace" : 7,
@@ -169,12 +169,12 @@
 			},
 			{
 				"backtrace" : 5,
-				"fragment" : "C:\\Users\\alain\\OneDrive\\Documents\\X3(ESIEA)\\Objet\\SDL2-2.30.9\\x86_64-w64-mingw32\\lib\\libSDL2main.a",
+				"fragment" : "\"C:\\Users\\alain\\OneDrive\\Documents\\X3(ESIEA)\\Objet\\Taquin - version graphique\\SDL\\SDL2-2.30.9\\x86_64-w64-mingw32\\lib\\libSDL2main.a\"",
 				"role" : "libraries"
 			},
 			{
 				"backtrace" : 5,
-				"fragment" : "C:\\Users\\alain\\OneDrive\\Documents\\X3(ESIEA)\\Objet\\SDL2-2.30.9\\x86_64-w64-mingw32\\lib\\libSDL2.dll.a",
+				"fragment" : "\"C:\\Users\\alain\\OneDrive\\Documents\\X3(ESIEA)\\Objet\\Taquin - version graphique\\SDL\\SDL2-2.30.9\\x86_64-w64-mingw32\\lib\\libSDL2.dll.a\"",
 				"role" : "libraries"
 			},
 			{
